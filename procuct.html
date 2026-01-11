@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Product — JNG</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+<div class="app">
+  <nav class="side-nav" aria-label="Main">
+    <div class="logo"><img src="images/logo.jpg" alt="logo"><div style="font-weight:700">JNG Solar</div></div>
+    <a href="index.html">Home</a>
+    <a href="products.html" class="active">Products</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart</a>
+  </nav>
+
+  <main class="main">
+    <div class="topbar"><button id="menu-toggle" class="menu-toggle">☰</button><div class="brand">Product</div></div>
+
+    <section class="section">
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:320px"><img id="prod-img" src="images/product1.jpg" style="width:100%;border-radius:8px" alt="Product"></div>
+        <div style="flex:1;min-width:320px">
+          <h1 id="prod-title">Product Title</h1>
+          <p id="prod-desc">Description</p>
+          <div id="prod-price" style="font-weight:800;color:var(--primary);font-size:20px">$199</div>
+          <div style="margin-top:12px">
+            <button class="detail-add-to-cart" data-id="p1" data-title="Product" data-price="$199" data-image="images/product1.jpg">Add to cart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer"><div class="inner">© JNG Solar & Security</div></footer>
+  </main>
+</div>
+
+<script src="scripts/main.js"></script>
+<script>
+// simple product loader (client-side)
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id') || 'p1';
+const map = {
+  p1: {title:'Solar Panel 320W', desc:'High-efficiency monocrystalline panel', price:'$189', image:'images/product1.jpg'},
+  p2: {title:'Hybrid Inverter', desc:'Smart inverter with battery support', price:'$499', image:'images/product2.jpg'},
+  p3: {title:'4K Security Camera', desc:'Weatherproof 4K camera', price:'$129', image:'images/product3.jpg'},
+  p4: {title:'Battery 10kWh', desc:'Reliable energy storage', price:'$899', image:'images/product1.jpg'}
+};
+const p = map[id] || map['p1'];
+document.getElementById('prod-title').textContent = p.title;
+document.getElementById('prod-desc').textContent = p.desc;
+document.getElementById('prod-price').textContent = p.price;
+document.getElementById('prod-img').src = p.image;
+document.querySelector('.detail-add-to-cart').dataset.id = id;
+document.querySelector('.detail-add-to-cart').dataset.title = p.title;
+document.querySelector('.detail-add-to-cart').dataset.price = p.price;
+document.querySelector('.detail-add-to-cart').dataset.image = p.image;
+</script>
+</body>
+</html>
