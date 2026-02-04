@@ -1,0 +1,38 @@
+{
+  "products": [
+    {
+      "id": "p1",
+      "name": "Solar Panel 320W",
+      "description": "High-efficiency monocrystalline panel",
+      "price": 189,
+      "image": "images/product1.jpg",
+      "featured": 1
+    },
+    {
+      "id": "p2",
+      "name": "Hybrid Inverter",
+      "description": "Smart inverter with battery support",
+      "price": 499,
+      "image": "images/product2.jpg",
+      "featured": 1
+    },
+    {
+      "id": "p3",
+      "name": "4K Security Camera",
+      "description": "Weatherproof 4K camera with night vision",
+      "price": 129,
+      "image": "images/product3.jpg",
+      "featured": 1
+    },
+    {
+      "id": "p4",
+      "name": "Battery 10kWh",
+      "description": "Reliable energy storage for solar systems",
+      "price": 899,
+      "image": "images/product1.jpg",
+      "featured": 0
+    }
+  ],
+  "purchases": [],
+  "purchase_items": []
+}
