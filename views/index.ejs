@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<%- include('partials/head', { title: 'JNG — Home' }) %>
+<body>
+  <div class="app">
+    <%- include('partials/nav', { activePage: 'home' }) %>
+
+    <main class="main" id="main">
+      <div class="topbar">
+        <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">☰</button>
+        <div class="brand">JNG Solar & Security</div>
+        <div style="margin-left:auto">Call: +258 84 000 0000</div>
+      </div>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap">
+          <div>
+            <h1 id="hero-title">Reliable Solar & Advanced Security</h1>
+            <p>Premium installations, commercial-grade CCTV and scalable solar solutions for homes and businesses.</p>
+            <div style="margin-top:16px">
+              <a class="btn btn-primary" href="/products">Shop Products</a>
+              <a class="btn btn-quote" href="/contact">Get a Quote</a>
+            </div>
+          </div>
+          <div><img src="/images/hero_jng.jpg" alt="Hero visual" style="width:420px;height:260px;object-fit:cover;border-radius:12px"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Featured Products</h2>
+
+        <div class="reel-controls" aria-hidden="true">
+          <button id="reel-left" class="icon-btn" aria-label="Scroll left">◀</button>
+          <button id="reel-right" class="icon-btn" aria-label="Scroll right">▶</button>
+        </div>
+
+        <div class="reel-wrap">
+          <div class="reel" id="reel" role="list">
+            <% featured.forEach(product => { %>
+              <div class="card" role="listitem">
+                <img src="/<%= product.image %>" alt="<%= product.name %>">
+                <h3><%= product.name %></h3>
+                <p class="muted"><%= product.description %></p>
+                <div class="price"><%= formatCurrency(product.price) %></div>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="add-to-cart" data-id="<%= product.id %>">Add to cart</button>
+                  <a href="/products/<%= product.id %>">View</a>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Our Services</h2>
+        <div class="cards">
+          <div class="card"><h3>Solar Installation</h3><p>Design and install solar systems for homes and businesses.</p></div>
+          <div class="card"><h3>Security Setup</h3><p>Full CCTV and alarm system setup with remote monitoring.</p></div>
+          <div class="card"><h3>Maintenance</h3><p>Ongoing maintenance and rapid response repairs.</p></div>
+        </div>
+      </section>
+
+      <%- include('partials/footer') %>
+    </main>
+
+    <%- include('partials/chat') %>
+  </div>
+
+  <script src="/scripts/main.js"></script>
+</body>
+</html>

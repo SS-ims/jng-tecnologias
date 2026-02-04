@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<%- include('partials/head', { title: 'Cart / Checkout — JNG' }) %>
+<body>
+<div class="app">
+  <%- include('partials/nav', { activePage: 'cart' }) %>
+
+  <main class="main">
+    <div class="topbar"><button id="menu-toggle" class="menu-toggle">☰</button><div class="brand">Checkout</div></div>
+
+    <section class="section">
+      <h2>Your Cart</h2>
+      <div id="cart-list"></div>
+    </section>
+
+    <section class="section">
+      <h2>Checkout</h2>
+      <form id="checkout-form">
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <input required name="name" placeholder="Full name" style="flex:1;padding:10px;border-radius:8px;border:1px solid #ddd">
+          <input required name="email" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid #ddd">
+        </div>
+        <div style="margin-top:12px">
+          <input required name="address" placeholder="Address" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
+        </div>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" type="submit">Place Order</button>
+        </div>
+      </form>
+      <div id="checkout-result" style="margin-top:12px"></div>
+    </section>
+
+    <%- include('partials/footer') %>
+  </main>
+
+  <%- include('partials/chat') %>
+</div>
+
+<script src="/scripts/main.js"></script>
+</body>
+</html>

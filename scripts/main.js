@@ -1,6 +1,6 @@
 // scripts/main.js
-// Main interactions: nav toggle, reel drag+swipe with inertia, cart, chat integration (calls /api/chat),
-// and Checkout integration (POST /create-checkout-session)
+// Main interactions: nav toggle, reel drag+swipe with inertia, cart via API,
+// chat integration (POST /api/chat), checkout (POST /api/checkout), location (GET /api/location)
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -117,96 +117,114 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   // ---------------------------
-  // CART functionality (client-side)
+  // CART functionality (API)
   // ---------------------------
-  function getCart(){ return JSON.parse(localStorage.getItem('cart') || '[]'); }
-  function saveCart(c){ localStorage.setItem('cart', JSON.stringify(c)); }
   const cartList = document.getElementById('cart-list');
   const cartCountElems = [document.getElementById('cart-count'), document.getElementById('cart-count-small')].filter(Boolean);
 
-  function renderCart(){
-    const current = getCart();
-    cartCountElems.forEach(el => el.textContent = current.reduce((s,i)=>s+i.qty,0));
-    if (!cartList) return;
-    cartList.innerHTML = '';
-    if(current.length===0){
-      cartList.innerHTML = '<div style="padding:12px;color:#666">Cart is empty</div>';
-      return;
+  async function fetchCart(){
+    const res = await fetch('/api/cart');
+    return res.json();
+  }
+
+  function setCartCount(items){
+    const count = items.reduce((sum, item) => sum + item.qty, 0);
+    cartCountElems.forEach(el => { if (el) el.textContent = count || ''; });
+  }
+
+  async function renderCart(){
+    try {
+      const data = await fetchCart();
+      const items = data.items || [];
+      setCartCount(items);
+      if (!cartList) return;
+      cartList.innerHTML = '';
+      if(items.length === 0){
+        cartList.innerHTML = '<div style="padding:12px;color:#666">Cart is empty</div>';
+        return;
+      }
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.style.display='flex';
+        div.style.gap='8px';
+        div.style.alignItems='center';
+        div.style.padding='8px 0';
+        div.innerHTML = `<img src="/${item.image}" style="width:60px;height:40px;object-fit:cover;border-radius:6px">
+          <div style="flex:1"><strong>${item.name}</strong><div style="color:#666;font-size:13px">$${item.price.toFixed(2)}</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div>
+              <button class="qty-decr" data-id="${item.productId}">−</button>
+              <span style="padding:0 8px">${item.qty}</span>
+              <button class="qty-incr" data-id="${item.productId}">+</button>
+            </div>
+            <button data-id="${item.productId}" class="remove">Remove</button>
+          </div>`;
+        cartList.appendChild(div);
+      });
+
+      cartList.querySelectorAll('.remove').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.target.dataset.id;
+          await fetch('/api/cart/remove', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({productId: id})
+          });
+          renderCart();
+        });
+      });
+      cartList.querySelectorAll('.qty-incr').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.target.dataset.id;
+          const item = (await fetchCart()).items.find(i => i.productId === id);
+          if (!item) return;
+          await fetch('/api/cart/update', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({productId: id, qty: item.qty + 1})
+          });
+          renderCart();
+        });
+      });
+      cartList.querySelectorAll('.qty-decr').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.target.dataset.id;
+          const item = (await fetchCart()).items.find(i => i.productId === id);
+          if (!item) return;
+          await fetch('/api/cart/update', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({productId: id, qty: Math.max(1, item.qty - 1)})
+          });
+          renderCart();
+        });
+      });
+    } catch (err) {
+      console.error('Failed to load cart', err);
     }
-    current.forEach(item=>{
-      const div = document.createElement('div');
-      div.style.display='flex';
-      div.style.gap='8px';
-      div.style.alignItems='center';
-      div.style.padding='8px 0';
-      div.innerHTML = `<img src="${item.image}" style="width:60px;height:40px;object-fit:cover;border-radius:6px">
-        <div style="flex:1"><strong>${item.title}</strong><div style="color:#666;font-size:13px">${item.price}</div></div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div>
-            <button class="qty-decr" data-id="${item.id}">−</button>
-            <span style="padding:0 8px">${item.qty}</span>
-            <button class="qty-incr" data-id="${item.id}">+</button>
-          </div>
-          <button data-id="${item.id}" class="remove">Remove</button>
-        </div>`;
-      cartList.appendChild(div);
-    });
-    // attach handlers
-    cartList.querySelectorAll('.remove').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        const id = e.target.dataset.id;
-        const c = getCart();
-        const idx = c.findIndex(ci=>ci.id===id);
-        if(idx>-1){ c.splice(idx,1); saveCart(c); renderCart(); }
-      });
-    });
-    cartList.querySelectorAll('.qty-incr').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        const id=e.target.dataset.id; const c=getCart(); const it=c.find(x=>x.id===id); if(it){ it.qty+=1; saveCart(c); renderCart(); }
-      });
-    });
-    cartList.querySelectorAll('.qty-decr').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        const id=e.target.dataset.id; const c=getCart(); const it=c.find(x=>x.id===id); if(it){ it.qty = Math.max(1, it.qty-1); saveCart(c); renderCart(); }
-      });
-    });
   }
   renderCart();
 
-  // Add to cart from buttons with data attributes
-  document.querySelectorAll('.add-to-cart').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.dataset.id;
-      const title = btn.dataset.title;
-      const price = btn.dataset.price;
-      const image = btn.dataset.image;
-      const c = getCart();
-      const existing = c.find(x=>x.id===id);
-      if(existing) existing.qty += 1; else c.push({id,title,price,image,qty:1});
-      saveCart(c);
-      renderCart();
-      const original = btn.textContent;
-      btn.textContent = 'Added ✓';
-      setTimeout(()=> btn.textContent = original, 900);
+  async function addToCart(productId, button){
+    await fetch('/api/cart/add', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({productId, qty: 1})
     });
+    await renderCart();
+    if (button) {
+      const original = button.textContent;
+      button.textContent = 'Added ✓';
+      setTimeout(()=> button.textContent = original, 900);
+    }
+  }
+
+  document.querySelectorAll('.add-to-cart').forEach(btn => {
+    btn.addEventListener('click', () => addToCart(btn.dataset.id, btn));
   });
 
-  // For product detail "Add to cart"
-  document.querySelectorAll('.detail-add-to-cart').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.dataset.id;
-      const title = btn.dataset.title;
-      const price = btn.dataset.price;
-      const image = btn.dataset.image;
-      const c = getCart();
-      const existing = c.find(x=>x.id===id);
-      if(existing) existing.qty += 1; else c.push({id,title,price,image,qty:1});
-      saveCart(c);
-      renderCart();
-      const original = btn.textContent;
-      btn.textContent = 'Added ✓';
-      setTimeout(()=> btn.textContent = original, 900);
-    });
+  document.querySelectorAll('.detail-add-to-cart').forEach(btn => {
+    btn.addEventListener('click', () => addToCart(btn.dataset.id, btn));
   });
 
   // ---------------------------
@@ -269,35 +287,69 @@ document.addEventListener('DOMContentLoaded', function(){
   if (input) input.addEventListener('keydown', function(e){ if(e.key==='Enter') sendMessage(); });
 
   // ---------------------------
-  // Stripe Checkout (client) - Checkout button on cart page
+  // Checkout (API)
   // ---------------------------
-  const stripeCheckoutBtn = document.getElementById('stripe-checkout-btn');
-  if (stripeCheckoutBtn) {
-    stripeCheckoutBtn.addEventListener('click', async function(){
-      const cart = getCart();
-      if (!cart || cart.length === 0) {
-        alert('Your cart is empty.');
-        return;
-      }
-      // send cart to server to create Stripe Checkout Session
+  const checkoutForm = document.getElementById('checkout-form');
+  const checkoutResult = document.getElementById('checkout-result');
+  if (checkoutForm) {
+    checkoutForm.addEventListener('submit', async function(e){
+      e.preventDefault();
+      const formData = new FormData(checkoutForm);
+      const payload = Object.fromEntries(formData.entries());
       try {
-        const res = await fetch('/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({cart})
+        const res = await fetch('/api/checkout', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
-        if (data && data.url) {
-          // Redirect to Stripe Checkout
-          window.location.href = data.url;
-        } else {
-          alert('Checkout failed. See console for details.');
-          console.error(data);
+        if (!res.ok) {
+          checkoutResult.textContent = data.message || 'Checkout failed.';
+          return;
         }
+        checkoutResult.textContent = `Order placed. Confirmation #${data.purchaseId}.`;
+        checkoutForm.reset();
+        renderCart();
       } catch (err) {
         console.error(err);
-        alert('Checkout request failed.');
+        checkoutResult.textContent = 'Checkout request failed.';
       }
+    });
+  }
+
+  // ---------------------------
+  // Location (API)
+  // ---------------------------
+  const locationInfo = document.getElementById('location-info');
+  if (locationInfo) {
+    fetch('/api/location')
+      .then(res => res.json())
+      .then(data => {
+        locationInfo.innerHTML = `
+          <h3>${data.name}</h3>
+          <p>${data.address}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Hours:</strong> ${data.hours}</p>
+          <a href="${data.mapUrl}" target="_blank" rel="noopener">Open map</a>
+        `;
+      })
+      .catch(() => {
+        locationInfo.textContent = 'Location information unavailable.';
+      });
+  }
+
+  // ---------------------------
+  // Contact form (demo)
+  // ---------------------------
+  const contactForm = document.getElementById('contact-form');
+  const contactResult = document.getElementById('contact-result');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (contactResult) {
+        contactResult.textContent = 'Thanks — we will get back to you shortly.';
+      }
+      contactForm.reset();
     });
   }
 

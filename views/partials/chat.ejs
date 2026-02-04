@@ -1,0 +1,17 @@
+<div id="chat-toggle" class="chat-toggle" aria-controls="chat-window" aria-expanded="false" role="button" tabindex="0">
+  <img src="/images/logo.jpg" alt="chat logo">
+  <div>Chat with us</div>
+</div>
+
+<div id="chat-window" class="chat-window hidden" role="dialog" aria-label="Chatbot">
+  <div class="chat-header">
+    <img src="/images/logo.jpg" alt="" style="height:34px;border-radius:6px">
+    <div style="flex:1">JNG Assist</div>
+    <button id="chat-close" aria-label="Close chat" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer">×</button>
+  </div>
+  <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
+  <div class="chat-input">
+    <input id="chat-input" placeholder="Type a message..." aria-label="Message input">
+    <button id="chat-send">Send</button>
+  </div>
+</div>

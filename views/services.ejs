@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<%- include('partials/head', { title: 'Services — JNG' }) %>
+<body>
+  <div class="app">
+    <%- include('partials/nav', { activePage: 'services' }) %>
+
+    <main class="main">
+      <div class="topbar"><button id="menu-toggle" class="menu-toggle">☰</button><div class="brand">Services</div></div>
+
+      <section class="section">
+        <h2>Our Services</h2>
+        <div class="cards">
+          <div class="card"><h3>Solar Installation</h3><p>Design and install solar systems for homes and businesses.</p></div>
+          <div class="card"><h3>Security Setup</h3><p>Full CCTV and alarm system setup with remote monitoring.</p></div>
+          <div class="card"><h3>Maintenance</h3><p>Ongoing maintenance and rapid response repairs.</p></div>
+        </div>
+      </section>
+
+      <%- include('partials/footer') %>
+    </main>
+
+    <%- include('partials/chat') %>
+  </div>
+
+  <script src="/scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<%- include('partials/head', { title: 'Products — JNG' }) %>
+<body>
+  <div class="app">
+    <%- include('partials/nav', { activePage: 'products' }) %>
+
+    <main class="main">
+      <div class="topbar"><button id="menu-toggle" class="menu-toggle">☰</button><div class="brand">Products</div></div>
+
+      <section class="section">
+        <h2>All Products</h2>
+        <div class="cards">
+          <% products.forEach(product => { %>
+            <article class="card">
+              <img src="/<%= product.image %>" alt="<%= product.name %>">
+              <h3><%= product.name %></h3>
+              <p class="muted"><%= product.description %></p>
+              <div class="price"><%= formatCurrency(product.price) %></div>
+              <div style="display:flex;gap:8px">
+                <button class="add-to-cart" data-id="<%= product.id %>">Add to cart</button>
+                <a href="/products/<%= product.id %>">View</a>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      </section>
+
+      <%- include('partials/footer') %>
+      </main>
+
+      <%- include('partials/chat') %>
+    </div>
+
+    <script src="/scripts/main.js"></script>
+</body>
+</html>
