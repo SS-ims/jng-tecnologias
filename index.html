@@ -1,140 +1,174 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-PT">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>JNG — Home</title>
+  <title>Z Ecoimpact — Consulting LDA</title>
   <link rel="stylesheet" href="styles/styles.css">
 </head>
+
 <body>
-  <div class="app">
+  <div class="eco-site">
     <nav class="side-nav" id="side-nav" aria-label="Main">
-      <div class="logo"><img src="images/logo.jpg" alt="logo"><div style="font-weight:700">JNG Solar</div></div>
-      <a href="index.html" class="active">Home</a>
-      <a href="products.html">Products</a>
-      <a href="services.html">Services</a>
-      <a href="contact.html">Contact</a>
-      <a href="cart.html">Cart <span id="cart-count-small"></span></a>
+      <div class="logo logo-stack">
+        <img src="images/logo_clean_transparent.png" alt="Z Ecoimpact logo" class="brand-logo">
+        <img src="images/brand.jpeg" alt="Ecoimpact brand" class="brand-image">
+        <img src="images/consulting.jpeg" alt="Consulting" class="brand-image consulting-image">
+      </div>
+      <a href="index.html" class="active">Início</a>
+      <a href="about.html">Sobre nós</a>
+      <a href="services.html">Serviços</a>
+      <a href="contact.html">Contactos</a>
     </nav>
 
-    <main class="main" id="main">
-      <div class="topbar">
-        <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">☰</button>
-        <div class="brand">JNG Solar & Security</div>
-        <div style="margin-left:auto">Call: +258 84 000 0000</div>
+    <main class="main eco-main" id="main">
+      <div class="topbar eco-topbar">
+        <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">☰</button>
+        <div class="brand">Z Ecoimpact Consulting LDA</div>
+        <div class="top-call">+258 8777 68890</div>
       </div>
 
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="wrap">
-          <div>
-            <h1 id="hero-title">Reliable Solar & Advanced Security</h1>
-            <p>Premium installations, commercial-grade CCTV and scalable solar solutions for homes and businesses.</p>
-            <div style="margin-top:16px">
-              <a class="btn btn-primary" href="products.html">Shop Products</a>
-              <a class="btn btn-quote" href="contact.html">Get a Quote</a>
-            </div>
+      <section class="eco-hero">
+        <div class="hero-banner">
+          <img src="images/hero.png" alt="Z Ecoimpact Consulting LDA" class="hero-image">
+          <div class="eco-badge-row">
+            <span>Inovação</span>
+            <span>Sustentabilidade</span>
+            <span>Energia para Desenvolvimento</span>
           </div>
-          <div><img src="images/hero_jng.jpg" alt="Hero visual" style="width:420px;height:260px;object-fit:cover;border-radius:12px"></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Featured Products</h2>
-
-        <div class="reel-controls" aria-hidden="true">
-          <button id="reel-left" class="icon-btn" aria-label="Scroll left">◀</button>
-          <button id="reel-right" class="icon-btn" aria-label="Scroll right">▶</button>
         </div>
 
-        <div class="reel-wrap">
-          <div class="reel" id="reel" role="list">
-            <div class="card" role="listitem">
-              <img src="images/product1.jpg" alt="Solar Panel">
-              <h3>Solar Panel 320W</h3>
-              <p class="muted">High-efficiency panel</p>
-              <div style="display:flex;gap:8px;margin-top:8px">
-                <button class="add-to-cart" data-id="p1" data-title="Solar Panel 320W" data-price="$189" data-image="images/product1.jpg">Add to cart</button>
-                <a href="product.html?id=p1">View</a>
-              </div>
-            </div>
-
-            <div class="card" role="listitem">
-              <img src="images/product2.jpg" alt="Inverter">
-              <h3>Hybrid Inverter</h3>
-              <p class="muted">Smart inverter with remote monitoring</p>
-              <div style="display:flex;gap:8px;margin-top:8px">
-                <button class="add-to-cart" data-id="p2" data-title="Hybrid Inverter" data-price="$499" data-image="images/product2.jpg">Add to cart</button>
-                <a href="product.html?id=p2">View</a>
-              </div>
-            </div>
-
-            <div class="card" role="listitem">
-              <img src="images/product3.jpg" alt="Camera">
-              <h3>4K Security Camera</h3>
-              <p class="muted">Night vision & motion alerts</p>
-              <div style="display:flex;gap:8px;margin-top:8px">
-                <button class="add-to-cart" data-id="p3" data-title="4K Security Camera" data-price="$129" data-image="images/product3.jpg">Add to cart</button>
-                <a href="product.html?id=p3">View</a>
-              </div>
-            </div>
-
-            <div class="card" role="listitem">
-              <img src="images/product1.jpg" alt="Battery">
-              <h3>Battery 10kWh</h3>
-              <p class="muted">Reliable energy storage</p>
-              <div style="display:flex;gap:8px;margin-top:8px">
-                <button class="add-to-cart" data-id="p4" data-title="Battery 10kWh" data-price="$899" data-image="images/product1.jpg">Add to cart</button>
-                <a href="product.html?id=p4">View</a>
-              </div>
-            </div>
-
+        <div class="eco-brand-copy eco-brand-stack">
+          <img src="images/brand.jpeg" alt="Z Ecoimpact" class="hero-brand-image">
+          <img src="images/consulting.jpeg" alt="Consulting" class="hero-brand-image hero-brand-image--small">
+          <div class="eco-mini-pills">
+            <span>Inovação</span>
+            <span>Sustentabilidade</span>
+            <span>Energia para o Desenvolvimento</span>
           </div>
         </div>
       </section>
 
-      <section class="section">
-        <h2>Our Services</h2>
-        <div class="cards">
-          <div class="card"><h3>Solar Installation</h3><p>Design and install solar systems for homes and businesses.</p></div>
-          <div class="card"><h3>Security Setup</h3><p>Full CCTV and alarm system setup with remote monitoring.</p></div>
-          <div class="card"><h3>Maintenance</h3><p>Ongoing maintenance and rapid response repairs.</p></div>
-        </div>
-      </section>
+  <section class="eco-intro">
+    <div class="eco-intro-copy">
+      <h2>Soluções sustentáveis,<br>impacto positivo,<br>futuro melhor!</h2>
+      <p>Na Z ECOIMPACT, oferecemos consultoria especializada e soluções integradas para promover o desenvolvimento
+        sustentável, protegendo o ambiente e criando valor para a sociedade.</p>
+    </div>
+    <div class="eco-commitment">
+      <p>Compromisso<br>com o ambiente,<br>excelência em<br>cada projecto.</p>
+    </div>
+  </section>
 
-      <footer class="footer"><div class="inner">© JNG Solar & Security • Maputo • <a href="contact.html" style="color:#fff">Contact</a></div></footer>
-    </main>
-
-    <!-- Cart drawer -->
-    <div id="cart-drawer" class="cart-drawer hidden" aria-hidden="true">
-      <h3>Your Cart</h3>
-      <div id="cart-list"></div>
-      <div style="padding:12px;border-top:1px solid #eee;margin-top:8px">
-        <a href="cart.html" class="btn btn-primary">Go to Checkout</a>
+  <section class="services-panel">
+    <div class="panel-title">Nossos Serviços</div>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="service-icon">♻</div>
+        <h3>Consultoria Ambiental</h3>
+        <p>Estudos de Impacto Ambiental (EIA), auditorias ambientais, licenciamento e planos de gestão ambiental.
+        </p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌿</div>
+        <h3>Biodiversidade</h3>
+        <p>Estudos de fauna e flora, planos de conservação e gestão de áreas protegidas.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">♻</div>
+        <h3>Gestão de Resíduos</h3>
+        <p>Planos de gestão de resíduos, reciclagem e soluções para resíduos sólidos e industriais.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💧</div>
+        <h3>Recursos Hídricos</h3>
+        <p>Gestão da água, monitoria ambiental e soluções para uso sustentável dos recursos hídricos.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Sustentabilidade e Clima</h3>
+        <p>Estratégias de sustentabilidade, adaptação e mitigação das mudanças climáticas.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🛡</div>
+        <h3>Segurança e Saúde</h3>
+        <p>Consultoria em HSE, avaliação de riscos e implementação de sistemas de gestão.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎓</div>
+        <h3>Capacitação e Formação</h3>
+        <p>Treinamentos e workshops em meio ambiente, segurança e sustentabilidade.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📌</div>
+        <h3>Monitoria e Fiscalização</h3>
+        <p>Monitoria ambiental, relatórios técnicos e acompanhamento de projectos.</p>
+      </div>
+      <div class="service-card" class="novidade">
+        <div class="service-icon">📌</div>
+        <h3>Projectos e Instalacoes Electricas</h3>
+        <p>Baixa e media tensao, intsalacoes residenciais e industriais.</p>
+      </div>
+      <div class="service-card" class="novidade">
+        <div class="service-icon">📌</div>
+        <h3>SISTEMAS DE FRIO COMERCIAL E INDUSTRIAL</h3>
+        <p>Camaras frigorifica,balcoes,refrigiraco industrial.</p>
+      </div>
+      <div class="service-card" class="novidade">
+        <div class="service-icon">📌</div>
+        <h3>CLIMATICACAO E VENTALACAO</h3>
+        <p>Instalacao, manutencao e higienizacao de sistemas de ar condicionado e vetilacao.</p>
+      </div>
+      <div class="service-card" class="novidade">
+        <div class="service-icon">📌</div>
+        <h3>MANUTENCAO PREVENTIVA E CORRETIVA</h3>
+        <p>Garantimos eficiencia , seguranca e economia de energis.</p>
       </div>
     </div>
+  </section>
 
-    <!-- Chat toggle -->
-    <div id="chat-toggle" class="chat-toggle" aria-controls="chat-window" aria-expanded="false" role="button" tabindex="0">
-      <img src="images/logo.jpg" alt="chat logo">
-      <div>Chat with us</div>
+  <section class="eco-why-us">
+    <div class="why-us-inner">
+      <h3>Porque escolher a Z Ecoimpact?</h3>
+      <ul>
+        <li>Equipa técnica qualificada e experiente</li>
+        <li>Soluções inovadoras e personalizadas</li>
+        <li>Compromisso com a qualidade e ética</li>
+        <li>Foco em resultados e sustentabilidade</li>
+      </ul>
     </div>
-
-    <!-- Chat window -->
-    <div id="chat-window" class="chat-window hidden" role="dialog" aria-label="Chatbot">
-      <div class="chat-header">
-        <img src="images/logo.jpg" alt="" style="height:34px;border-radius:6px">
-        <div style="flex:1">JNG Assist</div>
-        <button id="chat-close" aria-label="Close chat" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer">×</button>
-      </div>
-      <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
-      <div class="chat-input">
-        <input id="chat-input" placeholder="Type a message..." aria-label="Message input">
-        <button id="chat-send">Send</button>
-      </div>
+    <div class="mission-box">
+      <p>Ambiente,<br>nossa missão,<br>seu futuro!</p>
     </div>
+  </section>
 
+  <section class="contact-strip">
+    <div class="contact-callout">
+      <h3>Fale connosco!</h3>
+      <p>Estamos prontos para ajudar a transformar ideias em impactos positivos.</p>
+    </div>
+    <div class="contact-lines">
+      <p>+258 8777 68890</p>
+      <p>+258 8477 68894</p>
+      <p>zecoimpactconsulting@gmail.com</p>
+      <p>www.zecoimpact.co.mz</p>
+      <p>Telefone – Moçambique</p>
+    </div>
+    <div class="qr-box">
+      <span>Sigam-nos</span>
+      <div class="qr-placeholder">QR</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="inner"><span>Consultoria com propósito. Resultados com impacto.</span><a href="contact.html"
+        style="color:#fff">Contacte-nos</a></div>
+  </footer>
+  </main>
   </div>
 
   <script src="scripts/main.js"></script>
 </body>
+
 </html>

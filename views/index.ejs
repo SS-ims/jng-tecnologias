@@ -1,72 +1,195 @@
 <!doctype html>
-<html lang="en">
-<%- include('partials/head', { title: 'JNG — Home' }) %>
-<body>
-  <div class="app">
-    <%- include('partials/nav', { activePage: 'home' }) %>
+<html lang="pt-PT">
+<%- include('partials/head', { title: 'Z Ecoimpact — Consultoria LDA' }) %>
 
-    <main class="main" id="main">
-      <div class="topbar">
-        <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">☰</button>
-        <div class="brand">JNG Solar & Security</div>
-        <div style="margin-left:auto">Call: +258 84 000 0000</div>
-      </div>
+  <body>
+    <div class="eco-site">
+      <%- include('partials/nav', { activePage: 'home' }) %>
 
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="wrap">
-          <div>
-            <h1 id="hero-title">Reliable Solar & Advanced Security</h1>
-            <p>Premium installations, commercial-grade CCTV and scalable solar solutions for homes and businesses.</p>
-            <div style="margin-top:16px">
-              <a class="btn btn-primary" href="/products">Shop Products</a>
-              <a class="btn btn-quote" href="/contact">Get a Quote</a>
-            </div>
+        <main class="main eco-main" id="main">
+          <div class="topbar eco-topbar">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="brand">Z Ecoimpact Consulting LDA</div>
+            <div class="top-call">+258 8777 68890</div>
           </div>
-          <div><img src="/images/hero_jng.jpg" alt="Hero visual" style="width:420px;height:260px;object-fit:cover;border-radius:12px"></div>
-        </div>
-      </section>
 
-      <section class="section">
-        <h2>Featured Products</h2>
-
-        <div class="reel-controls" aria-hidden="true">
-          <button id="reel-left" class="icon-btn" aria-label="Scroll left">◀</button>
-          <button id="reel-right" class="icon-btn" aria-label="Scroll right">▶</button>
-        </div>
-
-        <div class="reel-wrap">
-          <div class="reel" id="reel" role="list">
-            <% featured.forEach(product => { %>
-              <div class="card" role="listitem">
-                <img src="/<%= product.image %>" alt="<%= product.name %>">
-                <h3><%= product.name %></h3>
-                <p class="muted"><%= product.description %></p>
-                <div class="price"><%= formatCurrency(product.price) %></div>
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <button class="add-to-cart" data-id="<%= product.id %>">Add to cart</button>
-                  <a href="/products/<%= product.id %>">View</a>
+          <section class="eco-hero">
+            <div class="eco-brand-block">
+              <div class="eco-logo-circle">
+                <div class="eco-logo-letter">Z</div>
+                <div class="eco-badge-row">
+                  <span>Inovação</span>
+                  <span>Sustentabilidade</span>
+                  <span>Energia para Desenvolvimento</span>
                 </div>
               </div>
-            <% }) %>
-          </div>
-        </div>
-      </section>
+            </div>
 
-      <section class="section">
-        <h2>Our Services</h2>
-        <div class="cards">
-          <div class="card"><h3>Solar Installation</h3><p>Design and install solar systems for homes and businesses.</p></div>
-          <div class="card"><h3>Security Setup</h3><p>Full CCTV and alarm system setup with remote monitoring.</p></div>
-          <div class="card"><h3>Maintenance</h3><p>Ongoing maintenance and rapid response repairs.</p></div>
-        </div>
-      </section>
+            <div class="eco-brand-copy eco-brand-stack">
+              <img src="images/brand.jpeg" alt="Z Ecoimpact" class="hero-brand-image">
+              <img src="images/consulting.jpeg" alt="Consulting" class="hero-brand-image hero-brand-image--small">
 
-      <%- include('partials/footer') %>
-    </main>
+              <div class="eco-mini-pills">
+                <span>Inovação</span>
+                <span>Sustentabilidade</span>
+                <span>Energia para o Desenvolvimento</span>
+              </div>
+            </div>
+          </section>
 
-    <%- include('partials/chat') %>
-  </div>
+          <section class="eco-intro">
+            <div class="eco-intro-copy">
+              <h2>Soluções sustentáveis,<br>impacto positivo,<br>futuro melhor!</h2>
+              <p>
+                Na Z ECOIMPACT, oferecemos consultoria especializada e soluções integradas para promover o
+                desenvolvimento sustentável,
+                protegendo o ambiente e criando valor para a sociedade.
+              </p>
+            </div>
 
-  <script src="/scripts/main.js"></script>
-</body>
+            <div class="eco-commitment">
+              <p>Compromisso<br>com o ambiente,<br>excelência em<br>cada projecto.</p>
+            </div>
+          </section>
+
+          <section class="services-panel">
+            <div class="panel-title">Nossos Serviços</div>
+
+            <div class="service-grid">
+              <div class="service-card">
+                <div class="service-icon">♻</div>
+                <h3>Consultoria Ambiental</h3>
+                <p>Estudos de Impacto Ambiental (EIA), auditorias ambientais, licenciamento e planos de gestão
+                  ambiental.</p>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">🌿</div>
+                <h3>Biodiversidade</h3>
+                <p>Estudos de fauna e flora, planos de conservação e gestão de áreas protegidas.</p>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">♻</div>
+                <h3>Gestão de Resíduos</h3>
+                <p>Planos de gestão de resíduos, reciclagem e soluções para resíduos sólidos e industriais.</p>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">💧</div>
+                <h3>Recursos Hídricos</h3>
+                <p>Gestão da água, monitoria ambiental e soluções para uso sustentável dos recursos hídricos.</p>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3>Sustentabilidade e Clima</h3>
+                <p>Estratégias de sustentabilidade, adaptação e mitigação das mudanças climáticas.</p>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">🛡</div>
+                <h3>Segurança e Saúde</h3>
+                <p>Consultoria em HSE, avaliação de riscos e implementação de sistemas de gestão.</p>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <h3>Capacitação e Formação</h3>
+                <p>Treinamentos e workshops em meio ambiente, segurança e sustentabilidade.</p>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">📌</div>
+                <h3>Monitoria e Fiscalização</h3>
+                <p>Monitoria ambiental, relatórios técnicos e acompanhamento de projectos.</p>
+              </div>
+            </div>
+
+            <div class="specialists-panel">
+              <div class="specialists-block">
+                <div class="expert-icon">⚡</div>
+                <div>
+                  <h4>Eletricidade, frio e climatização</h4>
+                  <p>Projectos e instalações eléctricas, baixa e média tensão, sistemas de frio e climatização.</p>
+                </div>
+              </div>
+
+              <div class="specialists-block">
+                <div class="expert-icon">🔧</div>
+                <div>
+                  <h4>Projectos e instalações eléctricas</h4>
+                  <p>Baixa e média tensão, instalações residenciais, comerciais e industriais.</p>
+                </div>
+              </div>
+
+              <div class="specialists-block">
+                <div class="expert-icon">❄</div>
+                <div>
+                  <h4>Sistemas de frio comercial e industrial</h4>
+                  <p>Câmaras frigoríficas, balões, refrigeração industrial e manutenção preventiva.</p>
+                </div>
+              </div>
+
+              <div class="specialists-block">
+                <div class="expert-icon">🌬</div>
+                <div>
+                  <h4>Climatização e ventilação</h4>
+                  <p>Instalação, manutenção e higienização de sistemas de ar condicionado e ventilação.</p>
+                </div>
+              </div>
+
+              <div class="specialists-block">
+                <div class="expert-icon">🛠</div>
+                <div>
+                  <h4>Manutenção preventiva e corretiva</h4>
+                  <p>Garantimos eficiência, segurança e continuidade operacional dos seus sistemas.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="eco-why-us">
+            <div class="why-us-inner">
+              <h3>Porque escolher a Z Ecoimpact?</h3>
+              <ul>
+                <li>Equipa técnica qualificada e experiente</li>
+                <li>Soluções inovadoras e personalizadas</li>
+                <li>Compromisso com a qualidade e ética</li>
+                <li>Foco em resultados e sustentabilidade</li>
+              </ul>
+            </div>
+
+            <div class="mission-box">
+              <p>Ambiente,<br>nossa missão,<br>seu futuro!</p>
+            </div>
+          </section>
+
+          <section class="contact-strip">
+            <div class="contact-callout">
+              <h3>Fale connosco!</h3>
+              <p>Estamos prontos para ajudar a transformar ideias em impactos positivos.</p>
+            </div>
+
+            <div class="contact-lines">
+              <p>+258 8777 68890</p>
+              <p>+258 8477 68894</p>
+              <p>zecoimpactconsulting@gmail.com</p>
+              <p>www.zecoimpact.co.mz</p>
+              <p>Telefone – Moçambique</p>
+            </div>
+
+            <div class="qr-box">
+              <span>Sigam-nos</span>
+              <div class="qr-placeholder">QR</div>
+            </div>
+          </section>
+
+          <%- include('partials/footer') %>
+        </main>
+    </div>
+
+    <script src="/scripts/main.js"></script>
+  </body>
+
 </html>

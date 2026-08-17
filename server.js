@@ -126,12 +126,16 @@ app.get("/services", (req, res) => {
   res.render("services");
 });
 
+app.get("/about", (req, res) => {
+  res.render("about");
+});
+
 app.get("/contact", (req, res) => {
   res.render("contact");
 });
 
 app.get("/cart", (req, res) => {
-  res.render("cart");
+  res.redirect("/about");
 });
 
 app.get("/admin", (req, res) => {

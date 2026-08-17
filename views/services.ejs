@@ -1,28 +1,92 @@
 <!doctype html>
-<html lang="en">
-<%- include('partials/head', { title: 'Services — JNG' }) %>
-<body>
-  <div class="app">
-    <%- include('partials/nav', { activePage: 'services' }) %>
+<html lang="pt-PT">
+<%- include('partials/head', { title: 'Serviços — Z Ecoimpact' }) %>
 
-    <main class="main">
-      <div class="topbar"><button id="menu-toggle" class="menu-toggle">☰</button><div class="brand">Services</div></div>
+  <body>
+    <div class="eco-site">
+      <%- include('partials/nav', { activePage: 'services' }) %>
 
-      <section class="section">
-        <h2>Our Services</h2>
-        <div class="cards">
-          <div class="card"><h3>Solar Installation</h3><p>Design and install solar systems for homes and businesses.</p></div>
-          <div class="card"><h3>Security Setup</h3><p>Full CCTV and alarm system setup with remote monitoring.</p></div>
-          <div class="card"><h3>Maintenance</h3><p>Ongoing maintenance and rapid response repairs.</p></div>
-        </div>
-      </section>
+        <main class="main eco-main">
+          <div class="topbar eco-topbar">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">☰</button>
+            <div class="brand">Z Ecoimpact Consulting LDA</div>
+            <div class="top-call">+258 8777 68890</div>
+          </div>
 
-      <%- include('partials/footer') %>
-    </main>
+          <section class="eco-hero" style="grid-template-columns: 1fr; text-align: center; padding-top: 40px;">
+            <div class="eco-brand-copy eco-brand-stack">
+              <img src="images/brand.jpeg" alt="Z Ecoimpact" class="hero-brand-image">
+              <img src="images/consulting.jpeg" alt="Consulting" class="hero-brand-image hero-brand-image--small">
+            </div>
+          </section>
 
-    <%- include('partials/chat') %>
-  </div>
+          <section class="services-panel">
+            <div class="panel-title">Nossos Serviços</div>
+            <div class="service-grid">
+              <div class="service-card">
+                <div class="service-icon">♻</div>
+                <h3>Consultoria Ambiental</h3>
+                <p>Estudos de Impacto Ambiental (EIA), auditorias ambientais, licenciamento e planos de gestão
+                  ambiental.</p>
+              </div>
+              <div class="service-card">
+                <div class="service-icon">🌿</div>
+                <h3>Biodiversidade</h3>
+                <p>Estudos de fauna e flora, planos de conservação e gestão de áreas protegidas.</p>
+              </div>
+              <div class="service-card">
+                <div class="service-icon">💧</div>
+                <h3>Recursos Hídricos</h3>
+                <p>Gestão da água, monitoria ambiental e soluções para uso sustentável dos recursos hídricos.</p>
+              </div>
+              <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3>Sustentabilidade e Clima</h3>
+                <p>Estratégias de sustentabilidade, adaptação e mitigação das mudanças climáticas.</p>
+              </div>
+              <div class="service-card">
+                <div class="service-icon">🛡</div>
+                <h3>Segurança e Saúde</h3>
+                <p>Consultoria em HSE, avaliação de riscos e implementação de sistemas de gestão.</p>
+              </div>
+              <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <h3>Capacitação e Formação</h3>
+                <p>Treinamentos e workshops em meio ambiente, segurança e sustentabilidade.</p>
+              </div>
+              <div class="service-card">
+                <div class="service-icon">♻</div>
+                <h3>Gestão de Resíduos</h3>
+                <p>Planos de gestão de resíduos, reciclagem e soluções para resíduos sólidos e industriais.</p>
+              </div>
+              <div class="service-card">
+                <div class="service-icon">📌</div>
+                <h3>Monitoria e Fiscalização</h3>
+                <p>Monitoria ambiental, relatórios técnicos e acompanhamento de projectos.</p>
+              </div>
+            </div>
+          </section>
 
-  <script src="/scripts/main.js"></script>
-</body>
+          <section class="eco-why-us">
+            <div class="why-us-inner">
+              <h3>Como trabalhamos</h3>
+              <ul>
+                <li>Diagnóstico técnico e ambiental</li>
+                <li>Planeamento e desenho de soluções</li>
+                <li>Implementação com acompanhamento contínuo</li>
+                <li>Apoio à conformidade e melhoria de desempenho</li>
+              </ul>
+            </div>
+            <div class="mission-box">
+              <p>Impacto<br>com responsabilidade</p>
+            </div>
+          </section>
+
+          <%- include('partials/footer') %>
+        </main>
+    </div>
+
+    <script src="/scripts/main.js"></script>
+  </body>
+
 </html>
