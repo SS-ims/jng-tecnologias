@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<%- include('partials/head', { title: 'Product — JNG' }) %>
+<%- include('partials/head', { title: 'Product — Z Ecoimpact' }) %>
 <body>
 <div class="app">
   <%- include('partials/nav', { activePage: 'products' }) %>
@@ -14,13 +14,13 @@
         <p class="muted">Please return to the product list.</p>
         <a class="btn btn-primary" href="/products">Back to products</a>
       <% } else { %>
-        <div style="display:flex;gap:20px;flex-wrap:wrap">
-          <div style="flex:1;min-width:320px"><img src="/<%= product.image %>" style="width:100%;border-radius:8px" alt="<%= product.name %>"></div>
-          <div style="flex:1;min-width:320px">
+        <div class="product-layout">
+          <div class="product-column"><img src="/<%= product.image %>" class="product-image" alt="<%= product.name %>"></div>
+          <div class="product-column">
             <h1><%= product.name %></h1>
             <p><%= product.description %></p>
-            <div style="font-weight:800;color:var(--primary);font-size:20px"><%= formatCurrency(product.price) %></div>
-            <div style="margin-top:12px">
+            <div class="product-price"><%= formatCurrency(product.price) %></div>
+            <div class="product-actions">
               <button class="detail-add-to-cart" data-id="<%= product.id %>">Add to cart</button>
             </div>
           </div>
@@ -30,8 +30,6 @@
 
     <%- include('partials/footer') %>
   </main>
-
-  <%- include('partials/chat') %>
 </div>
 
 <script src="/scripts/main.js"></script>

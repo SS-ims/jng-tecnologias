@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: "jng-session-secret",
+    secret: "z-ecoimpact-session-secret",
     resave: false,
     saveUninitialized: true
   })
@@ -278,13 +278,13 @@ app.post("/api/chat", (req, res) => {
   if (!message) {
     return res.json({ reply: "Please share how we can help." });
   }
-  const reply = `Thanks for your message: "${message}". A JNG specialist will reply shortly.`;
+  const reply = `Thanks for your message: "${message}". A Z Ecoimpact specialist will reply shortly.`;
   res.json({ reply });
 });
 
 app.get("/api/location", (req, res) => {
   res.json({
-    name: "JNG Solar & Security",
+    name: "Z Ecoimpact Consulting LDA",
     address: "Maputo, Mozambique",
     phone: "+258 84 000 0000",
     hours: "Mon-Fri 08:00 - 17:00",

@@ -13,7 +13,7 @@
             <div class="top-call">+258 8777 68890</div>
           </div>
 
-          <section class="eco-hero" style="grid-template-columns: 1fr; text-align: center; padding-top: 40px;">
+          <section class="eco-hero hero-centered">
             <div class="eco-brand-copy eco-brand-stack">
               <img src="images/brand.jpeg" alt="Z Ecoimpact" class="hero-brand-image">
               <img src="images/consulting.jpeg" alt="Consulting" class="hero-brand-image hero-brand-image--small">
@@ -33,20 +33,15 @@
 
           <section class="services-panel">
             <div class="panel-title">Enviar mensagem</div>
-            <div class="service-grid" style="grid-template-columns: 1fr;">
-              <div class="service-card" style="padding: 22px;">
-                <form id="contact-form" style="display:grid; gap: 14px;">
-                  <input name="name" required placeholder="Nome completo"
-                    style="width:100%;padding:12px 14px;border:1px solid rgba(17,94,56,0.2);border-radius:10px; font:inherit;">
-                  <input name="email" required placeholder="Email"
-                    style="width:100%;padding:12px 14px;border:1px solid rgba(17,94,56,0.2);border-radius:10px; font:inherit;">
-                  <textarea name="message" required placeholder="Mensagem"
-                    style="width:100%;height:140px;padding:12px 14px;border:1px solid rgba(17,94,56,0.2);border-radius:10px; font:inherit; resize: vertical;"></textarea>
-                  <div><button class="btn btn-primary" type="submit"
-                      style="background: var(--eco-green-1); color: #fff; border: none; border-radius: 10px; padding: 12px 20px; font-weight: 700; cursor: pointer;">Enviar</button>
-                  </div>
+            <div class="service-grid contact-form-shell">
+              <div class="service-card contact-card">
+                <form id="contact-form" class="contact-form">
+                  <input name="name" required placeholder="Nome completo" class="contact-field">
+                  <input name="email" required placeholder="Email" class="contact-field">
+                  <textarea name="message" required placeholder="Mensagem" class="contact-textarea"></textarea>
+                  <div><button class="btn btn-primary contact-submit" type="submit">Enviar</button></div>
                 </form>
-                <div id="contact-result" style="margin-top: 14px; color: var(--eco-green-1); font-weight: 700;"></div>
+                <div id="contact-result" class="contact-result"></div>
               </div>
             </div>
           </section>

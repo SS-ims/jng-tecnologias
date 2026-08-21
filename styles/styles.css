@@ -199,6 +199,12 @@ a {
   margin: 0;
 }
 
+.eco-hero.hero-centered {
+  grid-template-columns: 1fr;
+  text-align: center;
+  padding-top: 40px;
+}
+
 .eco-brand-block {
   display: flex;
   justify-content: center;
@@ -385,6 +391,10 @@ a {
   border-radius: 0 0 18px 18px;
 }
 
+.service-grid--three {
+  grid-template-columns: repeat(3, minmax(210px, 1fr));
+}
+
 .service-card {
   background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(22, 103, 62, 0.12);
@@ -415,6 +425,154 @@ a {
   margin: 0;
   color: var(--eco-muted);
   font-size: 0.96rem;
+}
+
+.contact-form-shell {
+  grid-template-columns: 1fr;
+}
+
+.contact-card {
+  padding: 22px;
+}
+
+.contact-form {
+  display: grid;
+  gap: 14px;
+}
+
+.contact-field,
+.contact-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(17, 94, 56, 0.2);
+  border-radius: 10px;
+  font: inherit;
+}
+
+.contact-textarea {
+  height: 140px;
+  resize: vertical;
+}
+
+.contact-submit {
+  background: var(--eco-green-1);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contact-result {
+  margin-top: 14px;
+  color: var(--eco-green-1);
+  font-weight: 700;
+}
+
+.product-layout {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.product-column {
+  flex: 1;
+  min-width: 320px;
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.product-price {
+  font-weight: 800;
+  color: var(--eco-green-1);
+  font-size: 20px;
+}
+
+.product-actions {
+  margin-top: 12px;
+}
+
+.products-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.inline-form {
+  margin: 0;
+}
+
+.product-form-card {
+  max-width: 720px;
+}
+
+.form-field,
+.form-textarea,
+.checkout-field,
+.checkout-address {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.form-textarea {
+  height: 120px;
+}
+
+.form-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.checkout-form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.checkout-field {
+  flex: 1;
+}
+
+.checkout-address {
+  margin-top: 12px;
+}
+
+.checkout-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.checkout-result {
+  margin-top: 12px;
+}
+
+.chat-brand-image {
+  height: 34px;
+  border-radius: 6px;
+}
+
+.chat-header-title {
+  flex: 1;
+}
+
+.chat-close-button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 .specialists-panel {
@@ -584,6 +742,38 @@ a {
   align-items: center;
   gap: 16px;
   font-weight: 600;
+}
+
+.footer-social {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-social svg {
+  width: 36px;
+  height: 36px;
+  display: block;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 0.5;
+}
+
+.footer-contact-link {
+  color: #fff;
+  text-decoration: none;
 }
 
 @media (max-width: 1100px) {
