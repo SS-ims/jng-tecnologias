@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<%- include('partials/head', { title: 'Admin — JNG' }) %>
+<%- include('partials/head', { title: 'Admin — Z Ecoimpact' }) %>
 <body>
   <div class="app">
     <%- include('partials/nav', { activePage: '' }) %>
@@ -10,18 +10,18 @@
 
       <section class="section">
         <h2>Manage Products</h2>
-        <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <div class="cards card-grid">
           <% products.forEach(product => { %>
             <article class="card">
               <img src="/<%= product.image %>" alt="<%= product.name %>">
               <h3><%= product.name %></h3>
               <p class="muted"><%= product.description %></p>
               <div class="price"><%= formatCurrency(product.price) %></div>
-              <div style="display:flex;gap:8px;align-items:center">
-                <form method="POST" action="/admin/products/<%= product.id %>/delete" style="margin:0">
+              <div class="products-actions">
+                <form method="POST" action="/admin/products/<%= product.id %>/delete" class="inline-form">
                   <button class="btn btn-quote" type="submit">Delete</button>
                 </form>
-                <form method="POST" action="/admin/products/<%= product.id %>/feature" style="margin:0">
+                <form method="POST" action="/admin/products/<%= product.id %>/feature" class="inline-form">
                   <button class="btn btn-primary" type="submit"><%= product.featured ? 'Unfeature' : 'Feature' %></button>
                 </form>
               </div>
@@ -32,13 +32,13 @@
 
       <section class="section">
         <h2>Add Product</h2>
-        <form method="POST" action="/admin/products" class="card" style="max-width:720px">
-          <input required name="id" placeholder="Product ID (e.g. p5)" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
-          <input required name="name" placeholder="Name" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
-          <textarea required name="description" placeholder="Description" style="width:100%;height:120px;padding:10px;border-radius:8px;border:1px solid #ddd"></textarea>
-          <input required name="price" type="number" step="0.01" min="0" placeholder="Price" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
-          <input required name="image" placeholder="Image path (e.g. images/product1.jpg)" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
-          <label style="display:flex;gap:8px;align-items:center">
+        <form method="POST" action="/admin/products" class="card product-form-card">
+          <input required name="id" placeholder="Product ID (e.g. p5)" class="form-field">
+          <input required name="name" placeholder="Name" class="form-field">
+          <textarea required name="description" placeholder="Description" class="form-textarea"></textarea>
+          <input required name="price" type="number" step="0.01" min="0" placeholder="Price" class="form-field">
+          <input required name="image" placeholder="Image path (e.g. images/product1.jpg)" class="form-field">
+          <label class="form-check">
             <input type="checkbox" name="featured" value="1"> Featured
           </label>
           <button class="btn btn-primary" type="submit">Save Product</button>
@@ -47,8 +47,6 @@
 
       <%- include('partials/footer') %>
     </main>
-
-    <%- include('partials/chat') %>
   </div>
 
   <script src="/scripts/main.js"></script>

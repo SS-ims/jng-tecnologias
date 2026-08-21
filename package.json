@@ -1,7 +1,7 @@
 {
-  "name": "jng-tecnologias",
+  "name": "z-ecoimpact",
   "version": "1.0.0",
-  "description": "JNG Solar & Security site (Node.js + EJS)",
+  "description": "Z Ecoimpact Consulting LDA website (Node.js + EJS)",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {

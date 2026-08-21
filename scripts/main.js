@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // initial welcome
-  setTimeout(() => appendMessage("Hello! I'm JNG Assist — how can I help you today?", 'bot'), 350);
+  setTimeout(() => appendMessage("Hello! I'm Z Ecoimpact Assist — how can I help you today?", 'bot'), 350);
 
   async function sendMessage() {
     if (!input) return;
