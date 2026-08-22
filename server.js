@@ -1,3 +1,7 @@
+// Load environment variables from a `.env` file when present. This must be
+// done before reading `process.env` values used elsewhere in the file.
+require('dotenv').config();
+
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
@@ -15,6 +19,28 @@ if (!fs.existsSync(dataDir)) {
 const dbPath = path.join(dataDir, "db.json");
 const adapter = new FileSync(dbPath);
 const db = low(adapter);
+
+// Optional MySQL integration:
+// - Set the environment variable `USE_MYSQL=true` to enable MySQL-backed
+//   product data instead of the built-in lowdb JSON file.
+// - When enabled we attempt to require the helper at `./db/mysql.js` which
+//   exports a connection pool and convenience functions (getProducts, etc.).
+// - If the helper cannot be loaded or an error occurs, `mysqlDb` will be
+//   left `null` and the application will fall back to the existing lowdb
+//   JSON store. This keeps the change backwards-compatible.
+const useMySQL = process.env.USE_MYSQL === "true";
+let mysqlDb = null;
+if (useMySQL) {
+  try {
+    // Load the MySQL helper module (created as db/mysql.js)
+    mysqlDb = require(path.join(__dirname, "db", "mysql"));
+    console.log("MySQL enabled for products");
+  } catch (err) {
+    // Fail gracefully: log and continue using lowdb
+    console.error("Failed to load MySQL helper:", err);
+    mysqlDb = null;
+  }
+}
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -43,7 +69,8 @@ app.use((req, res, next) => {
 });
 
 function initDb() {
-  db.defaults({ products: [], purchases: [], purchase_items: [] }).write();
+  // ensure local lowdb defaults include contacts for fallback storage
+  db.defaults({ products: [], purchases: [], purchase_items: [], contacts: [] }).write();
   const products = db.get("products").value();
   if (!products || products.length === 0) {
     db.get("products")
@@ -104,17 +131,53 @@ function cartTotal(cart) {
   return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
-app.get("/", (req, res) => {
+// Home route: prefer MySQL when available, otherwise use lowdb JSON data.
+app.get("/", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      // Try fetching products from MySQL and render featured ones.
+      const rows = await mysqlDb.getProducts();
+      const featured = rows.filter((r) => Number(r.featured) === 1);
+      return res.render("index", { featured });
+    } catch (err) {
+      // On any DB error, log and fall back to lowdb below.
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
+  // Default: read featured products from local lowdb JSON file.
   const featured = db.get("products").filter({ featured: 1 }).value();
   res.render("index", { featured });
 });
 
-app.get("/products", (req, res) => {
+// Products listing: use MySQL when present, otherwise fall back to lowdb.
+app.get("/products", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      const products = await mysqlDb.getProducts();
+      return res.render("products", { products });
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
   const products = db.get("products").value();
   res.render("products", { products });
 });
 
-app.get("/products/:id", (req, res) => {
+// Product detail: attempt MySQL lookup first, then lowdb. This keeps behavior
+// consistent whether MySQL is enabled or not.
+app.get("/products/:id", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      const product = await mysqlDb.getProductById(req.params.id);
+      if (!product) return res.status(404).render("product", { product: null });
+      return res.render("product", { product });
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
   const product = db.get("products").find({ id: req.params.id }).value();
   if (!product) {
     return res.status(404).render("product", { product: null });
@@ -138,13 +201,37 @@ app.get("/cart", (req, res) => {
   res.redirect("/about");
 });
 
-app.get("/admin", (req, res) => {
+// Admin view: show products from MySQL when enabled, otherwise from lowdb.
+app.get("/admin", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      const products = await mysqlDb.getProducts();
+      return res.render("admin", { products });
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
   const products = db.get("products").value();
   res.render("admin", { products });
 });
 
-app.post("/admin/products", (req, res) => {
+// Add product: when MySQL is enabled, insert into MySQL (if not exists).
+// Otherwise the product is added to the local lowdb JSON store.
+app.post("/admin/products", async (req, res) => {
   const { id, name, description, price, image, featured } = req.body;
+  if (mysqlDb) {
+    try {
+      const existing = await mysqlDb.getProductById(id);
+      if (!existing) {
+        await mysqlDb.addProduct({ id, name, description, price: Number(price), image, featured: featured ? 1 : 0 });
+      }
+      return res.redirect("/admin");
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb if MySQL operations fail
+    }
+  }
   const exists = db.get("products").find({ id }).value();
   if (!exists) {
     db.get("products")
@@ -161,12 +248,36 @@ app.post("/admin/products", (req, res) => {
   res.redirect("/admin");
 });
 
-app.post("/admin/products/:id/delete", (req, res) => {
+// Delete product: attempt deletion in MySQL first when enabled, else remove
+// from the local lowdb JSON store.
+app.post("/admin/products/:id/delete", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      await mysqlDb.deleteProductById(req.params.id);
+      return res.redirect("/admin");
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
   db.get("products").remove({ id: req.params.id }).write();
   res.redirect("/admin");
 });
 
-app.post("/admin/products/:id/feature", (req, res) => {
+// Toggle featured flag: keep behavior identical whether using MySQL or lowdb.
+app.post("/admin/products/:id/feature", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      const product = await mysqlDb.getProductById(req.params.id);
+      if (product) {
+        await mysqlDb.updateProductFeatured(req.params.id, product.featured ? 0 : 1);
+      }
+      return res.redirect("/admin");
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
   const product = db.get("products").find({ id: req.params.id }).value();
   if (product) {
     db.get("products")
@@ -177,12 +288,35 @@ app.post("/admin/products/:id/feature", (req, res) => {
   res.redirect("/admin");
 });
 
-app.get("/api/products", (req, res) => {
+// API endpoint: /api/products - returns product list from MySQL when enabled
+// or from lowdb otherwise.
+app.get("/api/products", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      const products = await mysqlDb.getProducts();
+      return res.json({ products });
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
   const products = db.get("products").value();
   res.json({ products });
 });
 
-app.get("/api/products/:id", (req, res) => {
+// API endpoint: /api/products/:id - returns a single product by id from the
+// enabled storage backend (MySQL preferred, lowdb fallback).
+app.get("/api/products/:id", async (req, res) => {
+  if (mysqlDb) {
+    try {
+      const product = await mysqlDb.getProductById(req.params.id);
+      if (!product) return res.status(404).json({ message: "Product not found" });
+      return res.json({ product });
+    } catch (err) {
+      console.error(err);
+      // fallthrough to lowdb
+    }
+  }
   const product = db.get("products").find({ id: req.params.id }).value();
   if (!product) {
     return res.status(404).json({ message: "Product not found" });
@@ -222,7 +356,11 @@ app.post("/api/cart/remove", (req, res) => {
   res.json({ items: req.session.cart, total: cartTotal(req.session.cart) });
 });
 
-app.post("/api/checkout", (req, res) => {
+
+
+// Checkout: when MySQL is enabled, persist the purchase and its items
+// transactionally to MySQL; otherwise use the existing lowdb JSON fallback.
+app.post("/api/checkout", async (req, res) => {
   const { name, email, address } = req.body;
   if (!name || !email || !address) {
     return res.status(400).json({ message: "Missing checkout details" });
@@ -232,6 +370,27 @@ app.post("/api/checkout", (req, res) => {
   }
 
   const total = cartTotal(req.session.cart);
+  if (mysqlDb) {
+    try {
+      // build purchase and items payloads compatible with mysql helper
+      const purchase = { name, email, address, total };
+      const items = req.session.cart.map((item) => ({
+        productId: item.productId,
+        name: item.name,
+        price: item.price,
+        qty: item.qty,
+        image: item.image
+      }));
+      const purchaseId = await mysqlDb.addPurchaseWithItems(purchase, items);
+      req.session.cart = [];
+      return res.json({ message: "Purchase complete", purchaseId, total });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Failed to persist purchase" });
+    }
+  }
+
+  // Fallback to lowdb (existing behavior)
   const currentMaxId = db.get("purchases").map("id").max().value() || 0;
   const purchaseId = currentMaxId + 1;
   db.get("purchases")
@@ -273,11 +432,31 @@ app.get("/api/purchases/:id", (req, res) => {
   res.json({ purchase, items });
 });
 
-app.post("/api/chat", (req, res) => {
-  const { message } = req.body;
+// Contact/chat endpoint: persist contact submissions when possible.
+// - If `USE_MYSQL=true` the submission is saved to the `contacts` table.
+// - Otherwise the app will append the submission to the local `data/db.json` contacts array.
+// This keeps a record of inbound messages for later review.
+app.post("/api/chat", async (req, res) => {
+  const { name, email, message } = req.body;
   if (!message) {
     return res.json({ reply: "Please share how we can help." });
   }
+
+  // Persist the contact submission to MySQL if available, otherwise lowdb.
+  if (mysqlDb) {
+    try {
+      await mysqlDb.addContact({ name: name || null, email: email || null, message });
+    } catch (err) {
+      console.error('Failed to save contact to MySQL:', err);
+      // continue — don't block the user from getting the reply
+    }
+  } else {
+    // lowdb fallback: store with a timestamp
+    db.get('contacts')
+      .push({ id: Date.now() + Math.floor(Math.random() * 1000), name: name || null, email: email || null, message, created_at: new Date().toISOString() })
+      .write();
+  }
+
   const reply = `Thanks for your message: "${message}". A Z Ecoimpact specialist will reply shortly.`;
   res.json({ reply });
 });

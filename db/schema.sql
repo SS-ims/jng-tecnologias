@@ -1,0 +1,40 @@
+-- Schema for z_ecoimpact
+CREATE DATABASE IF NOT EXISTS z_ecoimpact;
+USE z_ecoimpact;
+
+CREATE TABLE IF NOT EXISTS products (
+  id VARCHAR(50) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  price DECIMAL(10,2) NOT NULL DEFAULT 0,
+  image VARCHAR(255),
+  featured TINYINT(1) DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS purchases (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  email VARCHAR(255),
+  address TEXT,
+  total DECIMAL(10,2),
+  created_at DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS purchase_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  purchase_id INT NOT NULL,
+  product_id VARCHAR(50),
+  name VARCHAR(255),
+  price DECIMAL(10,2),
+  qty INT,
+  image VARCHAR(255),
+  FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS contacts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  email VARCHAR(255),
+  message TEXT,
+  created_at DATETIME
+);
