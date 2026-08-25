@@ -374,17 +374,32 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ---------------------------
-  // Contact form (demo)
+  // Submit contact messages to the server so they are stored in the active database.
   // ---------------------------
   const contactForm = document.getElementById('contact-form');
   const contactResult = document.getElementById('contact-result');
   if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
+    contactForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      if (contactResult) {
-        contactResult.textContent = 'Thanks — we will get back to you shortly.';
+      const submitButton = contactForm.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.disabled = true;
+      if (contactResult) contactResult.textContent = 'A enviar...';
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Unable to send message');
+        if (contactResult) contactResult.textContent = data.reply;
+        contactForm.reset();
+      } catch (error) {
+        if (contactResult) contactResult.textContent = 'Não foi possível enviar a mensagem. Tente novamente.';
+      } finally {
+        if (submitButton) submitButton.disabled = false;
       }
-      contactForm.reset();
     });
   }
 

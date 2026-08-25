@@ -462,7 +462,7 @@ app.post("/api/chat", async (req, res) => {
       await mysqlDb.addContact({ name: name || null, email: email || null, message });
     } catch (err) {
       console.error('Failed to save contact to MySQL:', err);
-      // continue — don't block the user from getting the reply
+      return res.status(503).json({ message: "Unable to save contact message" });
     }
   } else {
     // lowdb fallback: store with a timestamp
