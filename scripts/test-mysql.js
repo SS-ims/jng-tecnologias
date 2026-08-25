@@ -1,21 +1,17 @@
-// Simple MySQL connection test. Loads .env, connects and runs SELECT 1.
+// MySQL deployment check. Loads .env and verifies the connection and schema.
 require('dotenv').config();
 const mysqlDb = require('../db/mysql');
 
 (async function () {
   try {
-    const [rows] = await mysqlDb.pool.query('SELECT 1 AS ok');
-    console.log('MySQL test query result:', rows);
-    // Also attempt a products query to ensure the table works (non-fatal)
-    try {
-      const products = await mysqlDb.getProducts();
-      console.log('Products query returned', products.length, 'rows');
-    } catch (err) {
-      console.warn('Products query failed (table may not exist):', err.message || err);
-    }
+    const database = await mysqlDb.testConnection();
+    const products = await mysqlDb.getProducts();
+    console.log(`MySQL connection OK: ${database.database}`);
+    console.log(`Required tables OK: ${database.tables.join(', ')}`);
+    console.log(`Products available: ${products.length}`);
     process.exit(0);
   } catch (err) {
-    console.error('MySQL connection test failed:', err.message || err);
+    console.error('MySQL deployment check failed:', err.message || err);
     process.exit(1);
   }
 })();

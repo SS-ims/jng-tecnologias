@@ -3,11 +3,31 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
+  password: process.env.DB_PASSWORD || 'admin',
   database: process.env.DB_DATABASE || 'z_ecoimpact',
   waitForConnections: true,
   connectionLimit: 10
 });
+
+// Verify both the MySQL connection and the tables required by the application.
+async function testConnection() {
+  await pool.query('SELECT 1');
+  const [tables] = await pool.query(
+    `SELECT table_name FROM information_schema.tables
+     WHERE table_schema = ?
+     AND table_name IN ('products', 'purchases', 'purchase_items', 'contacts')`,
+    [process.env.DB_DATABASE || 'z_ecoimpact']
+  );
+  const requiredTables = ['products', 'purchases', 'purchase_items', 'contacts'];
+  const availableTables = new Set(tables.map((table) => table.TABLE_NAME || table.table_name));
+  const missingTables = requiredTables.filter((table) => !availableTables.has(table));
+  if (missingTables.length > 0) {
+    const error = new Error(`Missing MySQL tables: ${missingTables.join(', ')}`);
+    error.code = 'MISSING_TABLES';
+    throw error;
+  }
+  return { database: process.env.DB_DATABASE || 'z_ecoimpact', tables: requiredTables };
+}
 
 async function getProducts() {
   const [rows] = await pool.query('SELECT id, name, description, price, image, featured FROM products');
@@ -82,6 +102,7 @@ async function addContact(contact) {
 // application logic. New exports include purchase and contact helpers.
 module.exports = {
   pool,
+  testConnection,
   getProducts,
   getProductById,
   addProduct,

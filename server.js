@@ -68,6 +68,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// Provide a deployment-safe health check without exposing database credentials.
+app.get("/api/health", async (req, res) => {
+  if (!mysqlDb) {
+    return res.status(503).json({ status: "error", storage: "lowdb", message: "MySQL is disabled" });
+  }
+  try {
+    const database = await mysqlDb.testConnection();
+    res.json({ status: "ok", storage: "mysql", database: database.database, tables: database.tables });
+  } catch (err) {
+    console.error("MySQL health check failed:", err.message || err);
+    res.status(503).json({ status: "error", storage: "mysql", message: err.message || "Database unavailable" });
+  }
+});
+
 function initDb() {
   // ensure local lowdb defaults include contacts for fallback storage
   db.defaults({ products: [], purchases: [], purchase_items: [], contacts: [] }).write();

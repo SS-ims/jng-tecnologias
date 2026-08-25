@@ -1,7 +1,11 @@
 -- Schema for z_ecoimpact
 CREATE DATABASE IF NOT EXISTS z_ecoimpact;
 USE z_ecoimpact;
+USE z_ecoimpact;
 
+SHOW TABLES;
+
+SELECT COUNT(*) AS product_count FROM products;
 CREATE TABLE IF NOT EXISTS products (
   id VARCHAR(50) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -38,3 +42,5 @@ CREATE TABLE IF NOT EXISTS contacts (
   message TEXT,
   created_at DATETIME
 );
+
+
