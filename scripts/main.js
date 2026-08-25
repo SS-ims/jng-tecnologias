@@ -4,6 +4,18 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  // Normalize social links on static pages to match the index footer.
+  const socialLinks = {
+    linkedin: 'https://www.linkedin.com/in/zecoimpact-consulting-520ba442',
+    whatsapp: 'https://wa.me/258877768890? text=I%20am%20enquiring%20about%20Zecoimpactconsulting',
+    instagram: 'https://www.instagram.com/zecoimpactconsulting/',
+    facebook: 'https://www.facebook.com/profile.php?id=61593383057833'
+  };
+  document.querySelectorAll('.footer-social a').forEach((link) => {
+    const network = link.getAttribute('aria-label')?.toLowerCase();
+    if (network && socialLinks[network]) link.href = socialLinks[network];
+  });
+
   // NAV TOGGLE for small screens
   const sideNav = document.querySelector('.side-nav');
   const main = document.querySelector('.main');
