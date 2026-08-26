@@ -1,6 +1,6 @@
 // scripts/main.js
 // Main interactions: nav toggle, reel drag+swipe with inertia, cart via API,
-// chat integration (POST /api/chat), checkout (POST /api/checkout), location (GET /api/location)
+// contact email/database delivery (POST /api/chat), checkout (POST /api/checkout), location (GET /api/location)
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -408,7 +408,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (contactResult) contactResult.textContent = data.reply;
         contactForm.reset();
       } catch (error) {
-        if (contactResult) contactResult.textContent = 'Não foi possível enviar a mensagem. Tente novamente.';
+        // Display the server response so users know when their message was
+        // saved even if email delivery needs configuration or retries.
+        if (contactResult) contactResult.textContent = error.message || 'Não foi possível enviar a mensagem. Tente novamente.';
       } finally {
         if (submitButton) submitButton.disabled = false;
       }

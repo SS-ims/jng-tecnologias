@@ -6,11 +6,26 @@ const path = require("path");
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
+const nodemailer = require("nodemailer");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Gmail requires an app password for SMTP when two-step verification is enabled.
+// Leaving these values unset keeps the server startable, but contact delivery
+// will report a configuration error instead of pretending an email was sent.
+const mailTransport = process.env.MAIL_USER && process.env.MAIL_APP_PASSWORD
+  ? nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_APP_PASSWORD
+      }
+    })
+  : null;
+const contactRecipient = process.env.CONTACT_RECIPIENT || "zecoimpactconsulting@gmail.com";
 
 const dataDir = path.join(__dirname, "data");
 if (!fs.existsSync(dataDir)) {
@@ -452,14 +467,14 @@ app.get("/api/purchases/:id", (req, res) => {
 // This keeps a record of inbound messages for later review.
 app.post("/api/chat", async (req, res) => {
   const { name, email, message } = req.body;
-  if (!message) {
-    return res.json({ reply: "Please share how we can help." });
+  if (!name || !email || !message) {
+    return res.status(400).json({ message: "Name, email, and message are required" });
   }
 
   // Persist the contact submission to MySQL if available, otherwise lowdb.
   if (mysqlDb) {
     try {
-      await mysqlDb.addContact({ name: name || null, email: email || null, message });
+      await mysqlDb.addContact({ name, email, message });
     } catch (err) {
       console.error('Failed to save contact to MySQL:', err);
       return res.status(503).json({ message: "Unable to save contact message" });
@@ -467,12 +482,32 @@ app.post("/api/chat", async (req, res) => {
   } else {
     // lowdb fallback: store with a timestamp
     db.get('contacts')
-      .push({ id: Date.now() + Math.floor(Math.random() * 1000), name: name || null, email: email || null, message, created_at: new Date().toISOString() })
+      .push({ id: Date.now() + Math.floor(Math.random() * 1000), name, email, message, created_at: new Date().toISOString() })
       .write();
   }
 
-  const reply = `Thanks for your message: "${message}". A Z Ecoimpact specialist will reply shortly.`;
-  res.json({ reply });
+  // Send the notification only after persistence succeeds, so an email cannot
+  // announce a contact message that was not actually recorded in the database.
+  if (!mailTransport) {
+    return res.status(503).json({ message: "Message saved, but email delivery is not configured" });
+  }
+
+  try {
+    // Use the configured mailbox as the sender and the visitor as replyTo;
+    // this avoids Gmail rejecting messages that impersonate the visitor.
+    await mailTransport.sendMail({
+      from: process.env.MAIL_USER,
+      to: contactRecipient,
+      replyTo: email,
+      subject: `New contact message from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    });
+  } catch (err) {
+    console.error("Failed to send contact email:", err);
+    return res.status(502).json({ message: "Message saved, but email delivery failed" });
+  }
+
+  res.json({ reply: "Thanks for your message. A Z Ecoimpact specialist will reply shortly." });
 });
 
 app.get("/api/location", (req, res) => {
